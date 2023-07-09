@@ -47,20 +47,6 @@ class chessPlayer:
             sum += p
         return sum
 
-"""
-def main():
-    myself = chessPlayer('유승우')
-    myself.enter_match_result('김민성', '승', 39)
-    myself.enter_match_result('김태준', '승', 39)
-    myself.enter_match_result('심채은', '무', 36)
-    myself.enter_match_result('배지혁', '승', 39)
-    print(myself.calculate_cumulative_points())
-    print(myself.calculate_average_score())
-    print(myself.calculate_winning_rate())
-    print(myself.print_match_results())
-
-"""
-
 class chessInfoHandler:
     def __init__(self):
         self.chessPlayers = []
@@ -91,23 +77,23 @@ def main():
 
     root = tkinter.Tk()
     root.title("체스대국정보시스템")
-    root.geometry("1800x1000+100+100")
+    root.geometry("800x500")
     root.resizable(False, False)
 
     treeview = tkinter.ttk.Treeview(root, columns=["time", "player", "result", "point"], displaycolumns=["time", "player", "result", "point"])
     treeview.pack()
 
-    treeview.column("time", width=400, anchor="center")
-    treeview.heading("time", text="a", anchor="center")
+    treeview.column("time", width=150, anchor="center")
+    treeview.heading("time", text="경기 일시", anchor="center")
 
-    treeview.column("player", width=400, anchor="center")
-    treeview.heading("player", text="b", anchor="center")
+    treeview.column("player", width=100, anchor="center")
+    treeview.heading("player", text="상대", anchor="center")
 
-    treeview.column("result", width=400, anchor="center")
-    treeview.heading("result", text="c", anchor="center")
+    treeview.column("result", width=100, anchor="center")
+    treeview.heading("result", text="결과", anchor="center")
 
-    treeview.column("point", width=400, anchor="center")
-    treeview.heading("point", text="d", anchor="center")
+    treeview.column("point", width=100, anchor="center")
+    treeview.heading("point", text="획득 점수", anchor="center")
     
     for i in range(len(treelist)):
         treeview.insert("", "end", text="", values=treelist[i], iid=i)
