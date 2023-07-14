@@ -47,20 +47,6 @@ class chessPlayer:
             sum += p
         return sum
 
-"""
-def main():
-    myself = chessPlayer('유승우')
-    myself.enter_match_result('김민성', '승', 39)
-    myself.enter_match_result('김태준', '승', 39)
-    myself.enter_match_result('심채은', '무', 36)
-    myself.enter_match_result('배지혁', '승', 39)
-    print(myself.calculate_cumulative_points())
-    print(myself.calculate_average_score())
-    print(myself.calculate_winning_rate())
-    print(myself.print_match_results())
-
-"""
-
 class chessInfoHandler:
     def __init__(self):
         self.chessPlayers = []
