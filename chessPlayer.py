@@ -1,7 +1,7 @@
+import wx
+import wx.lib.buttons as buttons
 import pickle
 import datetime
-import tkinter
-import tkinter.ttk
 
 sadasol_kids = ['강승언', '곽민솔', '김기민', '김민성', '김보현', '김준우', '김태준', 
                 '나두경', '나형준', '배지혁', '심채원', '심채은', '유지현', '이윤지', 
@@ -82,37 +82,82 @@ class chessInfoHandler:
     def show_personal_info(self, idx):  # 개인 전적 확인
         return self.chessPlayers[idx].print_match_results();
 
+
+app = wx.App()
+frame_main = wx.Frame(None, 0, "MAIN", wx.Point(100,100), wx.Size(1200, 800), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER & ~wx.MAXIMIZE_BOX)
+frame_main.SetBackgroundColour(wx.Colour(255,255,255,0))
+
+fm_panelvert1 = wx.Panel(frame_main)
+fm_btn1 = buttons.GenButton(fm_panelvert1, label="경기 결과 등록")
+fm_btn2 = buttons.GenButton(fm_panelvert1, label="전체 순위")
+fm_btn3 = buttons.GenButton(fm_panelvert1, label="개인 전적 보기")
+fm_btn4 = buttons.GenButton(fm_panelvert1, label="기록 수정 및 삭제")
+fm_btn5 = buttons.GenButton(fm_panelvert1, label="프로그램 종료")
+fm_font = wx.Font(30, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
+fm_btns = [fm_btn1, fm_btn2, fm_btn3, fm_btn4, fm_btn5]
+
+for btn in fm_btns:
+    btn.SetBezelWidth(9)
+    btn.SetFont(fm_font)
+    btn.SetBackgroundColour(wx.Colour(117,150,86,0))
+    btn.SetForegroundColour(wx.WHITE)
+
+fm_sub_box1 = wx.BoxSizer(wx.VERTICAL)
+
+for btn in fm_btns:
+    fm_sub_box1.Add(btn, border=160 if btn == fm_btn1 else 50, flag=wx.UP | wx.EXPAND)
+
+fm_panelvert1.SetSizer(fm_sub_box1)
+
+fm_panelvert2 = wx.Panel(frame_main)
+fm_static = wx.StaticText(fm_panelvert2, label="4다솔 체스정보시스템")
+fm_static.SetFont(wx.Font(50, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_BOLD))
+fm_static.SetForegroundColour(wx.Colour(0,0,0,0))
+
+main_image = wx.Image("./kids.png")
+resized_main_image = main_image.Scale(600,489)
+
+main_bitmap = wx.Bitmap(resized_main_image)
+static_main_bitmap = wx.StaticBitmap(fm_panelvert2, bitmap=main_bitmap)
+static_main_bitmap.SetPosition((50,155))
+
+fm_box = wx.BoxSizer(wx.HORIZONTAL)
+frame_main.SetSizer(fm_box)
+fm_box.Add(fm_panelvert1, proportion = 4, border = 10, flag = wx.LEFT)
+fm_box.Add(fm_panelvert2, proportion = 6, border = 10, flag = wx.LEFT)
+
+"""
+frame_two = wx.Frame(None, 0, "두 번째 화면", wx.Point(100,100), wx.Size(600,400), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER)
+frame_two.SetBackgroundColour(wx.Colour(0,255,0,0))
+
+frame_three = wx.Frame(None, 0, "세 번째 화면", wx.Point(100,100), wx.Size(600,400), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER)
+frame_three.SetBackgroundColour(wx.Colour(0,0,255,0))
+"""
+frame_main.Show(True)
+
+#wx.CallLater(3000, show_message)
+app.MainLoop()
+
+"""
 def main():
-    handler = chessInfoHandler()
-    for i in sadasol_kids:
-        handler.add_player(i)
-    num = handler.getNameIndex("유승우")
-    treelist = handler.show_personal_info(num)
+    app = wx.App()
+    frame = wx.Frame(None)
 
-    root = tkinter.Tk()
-    root.title("체스대국정보시스템")
-    root.geometry("1800x1000+100+100")
-    root.resizable(False, False)
+    size = wx.Size(600,400)
+    frame.SetSize(size)
+    pos = wx.Point(100,100)
+    frame.SetPosition(pos)
+    color = wx.Colour(0,0,255,0)
+    frame.SetBackgroundColour(color)
+    frame.SetTitle("메인화면")
+    frame.SetWindowStyle(wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER)
 
-    treeview = tkinter.ttk.Treeview(root, columns=["time", "player", "result", "point"], displaycolumns=["time", "player", "result", "point"])
-    treeview.pack()
+    frame.Show(True)
+    app.MainLoop()
 
-    treeview.column("time", width=400, anchor="center")
-    treeview.heading("time", text="a", anchor="center")
 
-    treeview.column("player", width=400, anchor="center")
-    treeview.heading("player", text="b", anchor="center")
 
-    treeview.column("result", width=400, anchor="center")
-    treeview.heading("result", text="c", anchor="center")
-
-    treeview.column("point", width=400, anchor="center")
-    treeview.heading("point", text="d", anchor="center")
-    
-    for i in range(len(treelist)):
-        treeview.insert("", "end", text="", values=treelist[i], iid=i)
-
-    root.mainloop()
 
 if __name__ == '__main__':
     main()
+"""
