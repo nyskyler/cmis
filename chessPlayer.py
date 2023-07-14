@@ -68,19 +68,49 @@ class chessInfoHandler:
     def show_personal_info(self, idx):  # 개인 전적 확인
         return self.chessPlayers[idx].print_match_results();
 
+# 메인 화면
 
 app = wx.App()
-frame_main = wx.Frame(None, 0, "MAIN", wx.Point(100,100), wx.Size(1200, 800), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER & ~wx.MAXIMIZE_BOX)
+frame_main = wx.Frame(None, 0, "홈 화면", wx.Point(100,100), wx.Size(1200, 800), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER & ~wx.MAXIMIZE_BOX)
 frame_main.SetBackgroundColour(wx.Colour(255,255,255,0))
+
+def OnClick_fm_btn1(event):
+    frame_main.Hide()
+    frame_input.Show()
+    splitter.SplitVertically(fi_panel1, fi_panel2)
+    total_size = splitter.GetClientSize()
+    sash_position = total_size.GetWidth() // 2
+    splitter.SetSashPosition(sash_position)
+
+def OnClick_fm_btn2(event):
+    frame_main.Hide()
+    frame_rank.Show()
+
+def OnClick_fm_btn3(event):
+    frame_main.Hide()
+    frame_record.Show()
+
+def OnClick_fm_btn4(event):
+    frame_main.Hide()
+    frame_update.Show()
+
+def OnClick_fm_btn5(event):
+    frame_main.Close()
+    app.ExitMainLoop()
 
 fm_panelvert1 = wx.Panel(frame_main)
 fm_btn1 = buttons.GenButton(fm_panelvert1, label="경기 결과 등록")
 fm_btn2 = buttons.GenButton(fm_panelvert1, label="전체 순위")
-fm_btn3 = buttons.GenButton(fm_panelvert1, label="개인 전적 보기")
+fm_btn3 = buttons.GenButton(fm_panelvert1, label="개인 기록 보기")
 fm_btn4 = buttons.GenButton(fm_panelvert1, label="기록 수정 및 삭제")
 fm_btn5 = buttons.GenButton(fm_panelvert1, label="프로그램 종료")
 fm_font = wx.Font(30, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
 fm_btns = [fm_btn1, fm_btn2, fm_btn3, fm_btn4, fm_btn5]
+fm_btns_funcs = [OnClick_fm_btn1, OnClick_fm_btn2, OnClick_fm_btn3, OnClick_fm_btn4, OnClick_fm_btn5]
+zipped_main = zip(fm_btns, fm_btns_funcs)
+
+for item in zipped_main:
+    item[0].Bind(wx.EVT_BUTTON, item[1])
 
 for btn in fm_btns:
     btn.SetBezelWidth(9)
@@ -109,41 +139,94 @@ static_main_bitmap.SetPosition((50,155))
 
 fm_box = wx.BoxSizer(wx.HORIZONTAL)
 frame_main.SetSizer(fm_box)
-fm_box.Add(fm_panelvert1, proportion = 4, border = 10, flag = wx.LEFT)
-fm_box.Add(fm_panelvert2, proportion = 6, border = 10, flag = wx.LEFT)
+fm_box.Add(fm_panelvert1, proportion = 2, border = 10, flag = wx.LEFT)
+fm_box.Add(fm_panelvert2, proportion = 3, border = 10, flag = wx.LEFT)
 
-"""
-frame_two = wx.Frame(None, 0, "두 번째 화면", wx.Point(100,100), wx.Size(600,400), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER)
-frame_two.SetBackgroundColour(wx.Colour(0,255,0,0))
+# 경기 결과 등록
 
-frame_three = wx.Frame(None, 0, "세 번째 화면", wx.Point(100,100), wx.Size(600,400), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER)
-frame_three.SetBackgroundColour(wx.Colour(0,0,255,0))
-"""
-frame_main.Show(True)
+frame_input = wx.Frame(None, 1, "경기 결과 등록", wx.Point(100,100), wx.Size(1200, 800), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER & ~wx.MAXIMIZE_BOX)
+frame_input.SetBackgroundColour(wx.Colour(255,255,255,0))
+
+splitter = wx.SplitterWindow(frame_input)
+
+fi_panel1 = wx.Panel(splitter)
+fi_panel1.SetBackgroundColour(wx.WHITE)
+
+fi_panel2 = wx.Panel(splitter)
+fi_panel2.SetBackgroundColour(wx.Colour(117,150,86,0))
+
+fi_left_outer_sizer = wx.BoxSizer(wx.VERTICAL)
+fi_right_outer_sizer = wx.BoxSizer(wx.VERTICAL)
+
+fi_panel1.SetSizer(fi_left_outer_sizer)
+fi_panel2.SetSizer(fi_right_outer_sizer)
+
+fi_left_inner_sizer1 = wx.StaticBoxSizer(wx.HORIZONTAL, fi_panel1, "백 플레이어")
+fi_right_inner_sizer1 = wx.StaticBoxSizer(wx.HORIZONTAL, fi_panel2, "흑 플레이어")
+
+combo_left = wx.ComboBox(fi_panel1, choices=sadasol_kids)
+combo_left.SetSizeHints(150, -1)
+combo_right = wx.ComboBox(fi_panel2, choices=sadasol_kids)
+combo_right.SetSizeHints(150, -1)
+
+fi_left_inner_sizer2 = wx.StaticBoxSizer(wx.HORIZONTAL, fi_panel1, "백의 경기 결과")
+fi_right_inner_sizer2 = wx.StaticBoxSizer(wx.HORIZONTAL, fi_panel2, "흑의 경기 결과")
+
+left_win = wx.RadioButton(fi_panel1, label = "승", style = wx.RB_GROUP)
+left_draw = wx.RadioButton(fi_panel1, label = "무")
+left_lose = wx.RadioButton(fi_panel1, label = "패")
+right_win = wx.RadioButton(fi_panel2, label = "승", style = wx.RB_GROUP)
+right_draw = wx.RadioButton(fi_panel2, label = "무")
+right_lose = wx.RadioButton(fi_panel2, label = "패")
+
+for item in [left_win, left_draw, left_lose]:
+    item.SetForegroundColour(wx.Colour(0,0,0,0))
+    item.SetFont(wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL ))
+
+for item in [right_win, right_draw, right_lose]:
+    item.SetForegroundColour(wx.Colour(255,255,255,0))
+    item.SetFont(wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL ))
+
+fi_left_inner_sizer1.Add(combo_left, border=30, flag=wx.ALL)
+fi_right_inner_sizer1.Add(combo_right, border=30, flag=wx.ALL)
+
+fi_left_inner_sizer2.Add(left_win, border=30, flag=wx.ALL)
+fi_left_inner_sizer2.Add(left_draw, border=30, flag=wx.ALL)
+fi_left_inner_sizer2.Add(left_lose, border=30, flag=wx.ALL)
+fi_right_inner_sizer2.Add(right_win, border=30, flag=wx.ALL)
+fi_right_inner_sizer2.Add(right_draw, border=30, flag=wx.ALL)
+fi_right_inner_sizer2.Add(right_lose, border=30, flag=wx.ALL)
+
+fi_left_inner_sizer3 = wx.StaticBoxSizer(wx.VERTICAL, fi_panel1, "포인트 계산")
+fi_right_inner_sizer3 = wx.StaticBoxSizer(wx.VERTICAL, fi_panel2, "포인트 계산")
+
+fi_left_outer_sizer.Add(fi_left_inner_sizer1, border=25, flag=wx.ALL | wx.EXPAND)
+fi_right_outer_sizer.Add(fi_right_inner_sizer1, border=25, flag=wx.ALL | wx.EXPAND)
+
+fi_left_outer_sizer.Add(fi_left_inner_sizer2, border=25, flag=wx.ALL | wx.EXPAND)
+fi_right_outer_sizer.Add(fi_right_inner_sizer2, border=25, flag=wx.ALL | wx.EXPAND)
+
+fi_left_outer_sizer.Add(fi_left_inner_sizer3, border=25, flag=wx.ALL | wx.EXPAND)
+fi_right_outer_sizer.Add(fi_right_inner_sizer3, border=25, flag=wx.ALL | wx.EXPAND)
+
+
+# 전체 순위
+
+frame_rank = wx.Frame(None, 2, "전체 순위", wx.Point(100,100), wx.Size(1200, 800), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER & ~wx.MAXIMIZE_BOX)
+frame_rank.SetBackgroundColour(wx.Colour(255,255,255,0))
+
+# 개인 기록 보기
+
+frame_record = wx.Frame(None, 3, "개인 기록 보기", wx.Point(100,100), wx.Size(1200, 800), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER & ~wx.MAXIMIZE_BOX)
+frame_record.SetBackgroundColour(wx.Colour(255,255,255,0))
+
+# 기록 수정 및 삭제
+
+frame_update = wx.Frame(None, 4, "기록 수정 및 삭제", wx.Point(100,100), wx.Size(1200, 800), wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER & ~wx.MAXIMIZE_BOX)
+frame_update.SetBackgroundColour(wx.Colour(255,255,255,0))
+
+
+frame_main.Show()
 
 #wx.CallLater(3000, show_message)
 app.MainLoop()
-
-"""
-def main():
-    app = wx.App()
-    frame = wx.Frame(None)
-
-    size = wx.Size(600,400)
-    frame.SetSize(size)
-    pos = wx.Point(100,100)
-    frame.SetPosition(pos)
-    color = wx.Colour(0,0,255,0)
-    frame.SetBackgroundColour(color)
-    frame.SetTitle("메인화면")
-    frame.SetWindowStyle(wx.DEFAULT_FRAME_STYLE & ~wx.RESIZE_BORDER)
-
-    frame.Show(True)
-    app.MainLoop()
-
-
-
-
-if __name__ == '__main__':
-    main()
-"""
